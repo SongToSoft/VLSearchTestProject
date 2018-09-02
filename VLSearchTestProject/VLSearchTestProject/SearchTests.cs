@@ -5,7 +5,9 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 
 //Желательно проводить по несколько тестов, в случае запуска всех сразу возможно 
-//исключение из-за таймаута в 60 секунд (так было на моём ПК)
+//исключение из-за таймаута в 60 секунд (так было на моём ПК несколько раз).
+//Чаще все тесты проходили успешно.
+
 namespace VLSearchTestProject
 {
     [TestClass]
@@ -17,12 +19,15 @@ namespace VLSearchTestProject
         {
             Chrome = new ChromeDriver();
             Chrome.Navigate().GoToUrl("https://www.vl.ru/");
+            //Находим символ лупы и нажимаем на него
             var SearchButton = Chrome.FindElement(By.ClassName("header__search-form-toggle"));
             SearchButton.Click();
         }
+        //Непосредственный поисковый запрос
         private void DoQuery(string StartString, string CheckString)
         {
             StartTest();
+            //Непосредственный ввод запроса в поисковую строку
             var SearchPanel = Chrome.FindElement(By.ClassName("header__search-query"));
             SearchPanel.Clear();
             SearchPanel.SendKeys(StartString);
@@ -34,6 +39,8 @@ namespace VLSearchTestProject
             var Query = Chrome.FindElement(By.XPath(One + CheckString + Two));
             DoCheckQuery(Query);
         }
+        //Проверка параметров, которые должны находиться на открывшейся вкладке
+        //при корректном запросе
         private void DoCheckQuery(IWebElement Query)
         {
             try
